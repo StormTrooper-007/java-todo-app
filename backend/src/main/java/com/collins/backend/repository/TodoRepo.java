@@ -17,9 +17,9 @@ import static com.collins.backend.models.Status.OPEN;
 public class TodoRepo {
     private List<Todo> todosList;
 
+
     public TodoRepo(){
         this.todosList = new ArrayList<>();
-        todosList.add(new Todo("1", "am doing", Status.OPEN));
     }
 
     public List<Todo> getTodos(){
@@ -31,24 +31,39 @@ public class TodoRepo {
         return todosList;
     }
 
-    public List<Todo> deleteTodo(Todo todo){
-        for(Todo t:todosList){
-            if(t.getId().equals(todo.getId())){
-                todosList.remove(t);
+    public Todo getTodoById(String id){
+        for(Todo todo: todosList){
+            if(todo.getId().equals(id)) {
+                return todo;
             }
+        }
+        return null;
+    }
 
+    public List<Todo> deleteTodo(String id){
+        Todo todo = getTodoById(id);
+        todosList.remove(todo);
+        return todosList;
+    }
+
+
+    public List<Todo> editTodo(Todo todoEdit, String id){
+        for(Todo todo:todosList){
+            if(todo.getId().equals(id)){
+                todo.setStatus(todoEdit.getStatus());
+                todo.setDescription(todoEdit.getDescription());
+            }
         }
         return todosList;
     }
 
-    public List<Todo> editTodo(Todo toBeEditedTodo){
+    public void patchTodo(Todo todoPatch, String id){
         for(Todo todo:todosList){
-            if(todo.getId().equals(toBeEditedTodo.getId())){
-                todo.setStatus(toBeEditedTodo.getStatus());
-                todo.setDescription(toBeEditedTodo.getDescription());
+            if(todo.getId().equals(id)) {
+                todo.setStatus(todoPatch.getStatus());
+                todo.setDescription(todoPatch.getDescription());
             }
         }
-        return todosList;
     }
 
 }
