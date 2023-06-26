@@ -8,26 +8,20 @@ import {
   Stack,
   TextField, Typography
 } from "@mui/material";
-import SaveIcon from '@mui/icons-material/Save';
-import React, {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {v4 as uuidv4} from 'uuid';
 import EditIcon from "@mui/icons-material/Edit";
-import SelectStatus from "./components/SelectStatus.tsx";
 import Dialog from "./components/Dialog.tsx";
 
 
 export type TodoType = {
-  id:number,
-  description:string,
-  status:string
+  id: string,
+  description: string,
+  status: string
 }
 
 function App() {
-
-
-
-
   const [desc, setDesc] = useState<string>("");
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [id, setId] = useState<string>("");
@@ -36,7 +30,6 @@ function App() {
   const [status, setStatus] = useState<string>("OPEN");
   const todoRef = useRef("" as any);
   const [showStatus, setShowStatus] = useState<boolean>(false);
-  const [todoo, setTodoo] = useState<any>({});
   const [cancelEdit, setCancelEdit] = useState(false);
 
 
@@ -187,16 +180,9 @@ function App() {
             {
               showStatus ?
               <Dialog
-                  setShowStatus={setShowStatus}
-                  showStatus={showStatus}
                   status={status}
                   setStatus={setStatus}
-                  setTodoo={setTodoo}
-                  todoo={todoo}
-                  todos={todos}
-                  desc={desc}
                   statusId={statusId}
-                  editTodo={editTodo}
                   patchTodo={patchTodo}
               >
               </Dialog>
