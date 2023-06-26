@@ -47,9 +47,9 @@ public class TodoRepo {
     }
 
 
-    public List<Todo> editTodo(Todo todoEdit, String id){
-        for(Todo todo:todosList){
-            if(todo.getId().equals(id)){
+    public List<Todo> editTodo(Todo todoEdit, String id) {
+        for (Todo todo : todosList) {
+            if (todo.getId().equals(id)) {
                 todo.setStatus(todoEdit.getStatus());
                 todo.setDescription(todoEdit.getDescription());
             }
@@ -57,11 +57,10 @@ public class TodoRepo {
         return todosList;
     }
 
-    public void patchTodo(Todo todoPatch, String id){
-        for(Todo todo:todosList){
-            if(todo.getId().equals(id)) {
-                todo.setStatus(todoPatch.getStatus());
-                todo.setDescription(todoPatch.getDescription());
+    public void patchTodo(Todo patchTodo, String id) {
+        for (Todo todo : todosList) {
+            if (todo.getId().equals(id)) {
+                todo.setStatus(patchTodo.getStatus());
             }
         }
     }

@@ -37,6 +37,7 @@ function App() {
   const todoRef = useRef("" as any);
   const [showStatus, setShowStatus] = useState<boolean>(false);
   const [todoo, setTodoo] = useState<any>({});
+  const [cancelEdit, setCancelEdit] = useState(false);
 
 
   async function addTodo(){
@@ -98,45 +99,79 @@ function App() {
 
 
   async function editTodo(desc:string, status:string, id:string){
-    try{
+    try {
       const newTodo = {
-        id:id,
-        status:status,
-        description:desc
+        id: id,
+        status: status,
+        description: desc
       }
       const result = todos.find((todo) => todo.id.toString() === id)
-      if(result) await axios.put(`http://localhost:8080/api/v1/todos/edit?id=${id}`,
+      if (result) await axios.put(`http://localhost:8080/api/v1/todos/edit?id=${id}`,
           newTodo)
       location.reload()
-    }catch(error){
-        console.warn(error)
+    } catch (error) {
+      console.warn(error)
     }
   }
 
+  async function patchTodo(status: string, statusId: string) {
+    try {
+      const patchData: { status: string } = {
+        status: status
+      }
+      await axios.patch(`http://localhost:8080/api/v1/todos/status?id=${statusId}`, patchData)
+    } catch (error) {
+      console.warn(error)
+    }
+  }
+
+  console.log(status)
+
 
   return (
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{flexGrow: 1}}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Paper sx={paperStyled}>Todo App</Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper sx={{display:"flex", padding:3, justifyContent:"space-between"}}>
+            <Paper sx={{display: "flex", padding: 3, justifyContent: "space-between", alignItems: "center"}}>
               <TextField
+                  fullWidth={true}
+                  sx={{margin: 2}}
                   multiline
                   label="add - todo"
                   variant="outlined"
                   inputRef={todoRef as any}
-                  onChange={(event:any) => setDesc(event.target.value)}
+                  onChange={(event: any) => setDesc(event.target.value)}
               />
+              {
+                !isEdit ?
+                    <Button sx={{marginLeft: 1, textTransform: "none"}}
+                            onClick={() => addTodo()}
+                    >
+                      Add Todo
+                    </Button>
+                    :
+                    <Button variant="contained"
+                            sx={{
+                              height: 20,
+                              width: 20,
+                              padding: 3,
+                              paddingLeft: 1,
+                              paddingRight: 1,
+                              textTransform: "none"
+                            }}
+                            onClick={() => editTodo(desc, status, id)}>Update</Button>
+              }
               {isEdit
                   ?
-                  <FormControl size="small" sx={{minWidth: 120, mt:1}}>
+                  <FormControl size="small" sx={{minWidth: 120, margin: 2}}>
                     <InputLabel>status</InputLabel>
                     <Select
                         value={status}
                         label="status"
-                        onChange={(event:any) => {
+                        onChange={(event: any) => {
                           setStatus(event.target.value)
                         }}
                     >
@@ -146,16 +181,6 @@ function App() {
                     </Select>
                   </FormControl>
                   : null }
-              {
-                !isEdit ?
-                    <Button sx={{marginLeft:1}}
-                      onClick={() => addTodo()}
-                     >
-                    <SaveIcon/>
-                    </Button>
-                    :
-                    <Button variant="contained" onClick={() => editTodo(desc, status, id)}>Update</Button>
-              }
             </Paper>
           </Grid>
           <Box>
@@ -172,6 +197,7 @@ function App() {
                   desc={desc}
                   statusId={statusId}
                   editTodo={editTodo}
+                  patchTodo={patchTodo}
               >
               </Dialog>
                   :
@@ -192,14 +218,37 @@ function App() {
             {todos.map((todo:TodoType, index:number) => (
                   <Grid item xs={2} sm={4} md={4} key={index}>
                     <Paper sx={paperStyled}>
-                      <Typography>Task: {todo.description}</Typography>
-                      <Typography>Task: {todo.status}</Typography>
-                      <Button onClick={() => setId(todo.id.toString())}> <EditIcon/> </Button>
-                      <Button onClick={() => {
-                        setShowStatus(prev => !prev)
-                        setStatusId(todo.id.toString())
+                      <Typography>Task : {todo.description}</Typography>
+                      <Typography>Task-Status : {todo.status}</Typography>
+                      {
+                        cancelEdit ?
+                            <Button onClick={() => {
+                              setCancelEdit(prev => !prev)
+                              setId("")
+                            }}
+                                    sx={{textTransform: "none"}}
+                            >cancel</Button>
+                            :
+                            <Button
+                                onClick={() => {
+                                  setId(todo.id.toString())
+                                  setCancelEdit(prev => !prev)
+                                }}>
+                              <EditIcon/>
+                            </Button>
                       }
-                      }> change status </Button>
+
+                      {!showStatus ?
+                          <Button sx={{textTransform: "none"}} onClick={() => {
+                            setShowStatus(prev => !prev)
+                            setStatusId(todo.id.toString())
+                          }
+                          }> change status </Button>
+                          :
+                          <Button onClick={() => setShowStatus(prev => !prev)}>
+                            cancel
+                          </Button>
+                      }
                     </Paper>
                   </Grid>
             ))}

@@ -30,19 +30,20 @@ public class TodoController {
     public List<Todo> addTodo(@RequestBody Todo todo){
         return todoService.addTodo(todo);
     }
+
     @DeleteMapping("/todos/delete")
-    public List<Todo> deleteTodo(@RequestParam String id){
+    public List<Todo> deleteTodo(@RequestParam String id) {
         return todoService.deleteTodo(id);
     }
 
     @PutMapping("/todos/edit")
-    public List<Todo> editTodo(@RequestBody Todo todoEdit, @RequestParam String id){
+    public List<Todo> editTodo(@RequestBody Todo todoEdit, @RequestParam String id) {
         return todoService.editTodo(todoEdit, id);
     }
 
-    @PutMapping("/todos/status")
-    public void patchTodo(@RequestBody Todo todoPatch, @RequestParam String id){
-         todoService.patchTodo(todoPatch, id);
+    @PatchMapping("/todos/status")
+    public void patchTodo(@RequestBody Todo patchTodo, @RequestParam String id) {
+        todoService.patchTodo(patchTodo, id);
     }
 
 }

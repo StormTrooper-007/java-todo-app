@@ -4,30 +4,32 @@ import React from "react";
 import {TodoType} from "../App.tsx";
 
 type props = {
-    status:string
-    setStatus:React.Dispatch<React.SetStateAction<string>>
-    todo:TodoType
-    showStatus:boolean
-    setShowStatus:React.Dispatch<React.SetStateAction<boolean>>
-    setTodoo:React.Dispatch<React.SetStateAction<any>>
-    todoo:any
-    desc:string
-    statusId:string
-    editTodo:(statusId:string, desc:string, status:string) => void
+    status: string
+    setStatus: React.Dispatch<React.SetStateAction<string>>
+    todo: TodoType
+    showStatus: boolean
+    setShowStatus: React.Dispatch<React.SetStateAction<boolean>>
+    setTodoo: React.Dispatch<React.SetStateAction<any>>
+    todoo: any
+    desc: string
+    statusId: string
+    patchTodo: (status: string, id: string) => void
 }
 
 
-export default function Dialog({todos,
-                                   status,setStatus,
+export default function Dialog({
+                                   todos,
+                                   status, setStatus,
                                    todo, showStatus,
                                    setShowStatus,
                                    setTodoo,
                                    desc,
                                    todoo,
-                                editTodo,
-                                 statusId,
-    id
-                               }:props){
+                                   editTodo,
+                                   statusId,
+                                   patchTodo,
+                                   id
+                               }: props) {
     console.log(statusId)
 
     return(
@@ -42,7 +44,11 @@ export default function Dialog({todos,
                 todos={todos}
                 desc={desc}
             ></SelectStatus>
-            <Button onClick={() => editTodo(statusId, desc, status)}> update </Button>
+            <Button onClick={() => {
+                patchTodo(status, statusId)
+                location.reload()
+
+            }}> update </Button>
         </Paper>
     )
 }

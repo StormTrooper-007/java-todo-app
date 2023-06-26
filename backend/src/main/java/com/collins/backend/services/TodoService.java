@@ -26,16 +26,16 @@ public class TodoService {
         return todoRepo.addTodo(todo);
     }
 
-    public List<Todo> deleteTodo(String id){
+    public List<Todo> deleteTodo(String id) {
         return todoRepo.deleteTodo(id);
     }
 
-    public List<Todo> editTodo(Todo todoEdit, String id){
+    public List<Todo> editTodo(Todo todoEdit, String id) {
         return todoRepo.editTodo(todoEdit, id);
     }
 
-    public void patchTodo(Todo todoPatch, String id){
-        todoRepo.patchTodo(todoPatch, id);
+    public void patchTodo(Todo patchTodo, String id) {
+        todoRepo.patchTodo(patchTodo, id);
     }
 
 }
