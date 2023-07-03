@@ -1,16 +1,11 @@
 package com.collins.backend.repository;
 
-import com.collins.backend.models.Status;
 import com.collins.backend.models.Todo;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.service.annotation.PutExchange;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.collins.backend.models.Status.OPEN;
 
 @Repository
 @Data
@@ -26,9 +21,9 @@ public class TodoRepo {
         return todosList;
     }
 
-    public List<Todo> addTodo(Todo newTodo){
+    public Todo addTodo(Todo newTodo) {
         todosList.add(newTodo);
-        return todosList;
+        return newTodo;
     }
 
     public Todo getTodoById(String id){
@@ -47,22 +42,23 @@ public class TodoRepo {
     }
 
 
-    public List<Todo> editTodo(Todo todoEdit, String id) {
+    public Todo editTodo(Todo todoEdit, String id) {
         for (Todo todo : todosList) {
             if (todo.getId().equals(id)) {
                 todo.setStatus(todoEdit.getStatus());
                 todo.setDescription(todoEdit.getDescription());
             }
         }
-        return todosList;
+        return todoEdit;
     }
 
-    public void patchTodo(Todo patchTodo, String id) {
+    public Todo editTodoStatus(Todo patchTodo, String id) {
         for (Todo todo : todosList) {
             if (todo.getId().equals(id)) {
                 todo.setStatus(patchTodo.getStatus());
             }
         }
+        return patchTodo;
     }
 
 }

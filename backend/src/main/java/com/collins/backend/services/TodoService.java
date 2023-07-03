@@ -1,6 +1,5 @@
 package com.collins.backend.services;
 
-import com.collins.backend.models.Status;
 import com.collins.backend.models.Todo;
 import com.collins.backend.repository.TodoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class TodoService {
         return todoRepo.getTodos();
     }
 
-    public List<Todo> addTodo(Todo todo){
+    public Todo addTodo(Todo todo) {
         return todoRepo.addTodo(todo);
     }
 
@@ -30,12 +29,13 @@ public class TodoService {
         return todoRepo.deleteTodo(id);
     }
 
-    public List<Todo> editTodo(Todo todoEdit, String id) {
+    public Todo editTodo(Todo todoEdit, String id) {
         return todoRepo.editTodo(todoEdit, id);
     }
 
-    public void patchTodo(Todo patchTodo, String id) {
-        todoRepo.patchTodo(patchTodo, id);
+    public Todo editTodoStatus(Todo patchTodo, String id) {
+        todoRepo.editTodoStatus(patchTodo, id);
+        return patchTodo;
     }
 
 }
