@@ -22,6 +22,7 @@ public class TodoService {
     }
 
     public Todo addTodo(Todo todo) {
+
         return todoRepo.addTodo(todo);
     }
 
@@ -34,8 +35,6 @@ public class TodoService {
     }
 
     public Todo editTodoStatus(Todo patchTodo, String id) {
-        todoRepo.editTodoStatus(patchTodo, id);
-        return patchTodo;
+        return todoRepo.editTodoStatus(patchTodo, id);
     }
-
 }

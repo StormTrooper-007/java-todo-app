@@ -9,8 +9,15 @@ export const Item = styled(Paper)(({theme}) => ({
     margin: 3
 }));
 
+export enum Status {
+    OPEN,
+    DOING,
+    DONE
+}
+
 export type TodoType = {
     id: string,
     description: string,
-    status: string
+    status: Status
 }
+

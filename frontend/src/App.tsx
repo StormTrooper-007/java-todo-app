@@ -1,56 +1,31 @@
-import {Box, Grid} from "@mui/material";
 import AppHeader from "./components/AppHeader.tsx";
+import {useState} from "react";
+import TodoForm from "./components/TodoForm.tsx";
+import TodosContainer from "./components/TodosContainer.tsx";
+import TodoChips from "./components/TodoChips.tsx";
+import EditDialog from "./components/EditDialog.tsx";
+import {TodoType} from "./Utils.tsx";
 
 
 function App() {
-    /* const [desc, setDesc] = useState<string>("");
+
+    /*
      const [filters, setFilters] = useState<[]>([]);
-     const [activeFilters, setActiveFilters] = useState<string>("OPEN");
-     const [error, setError] =
-         useState<{getError:string, postError:string}>({
-         getError:"",
-         postError:""
-     });*/
+     const [activeFilters, setActiveFilters] = useState<string>("OPEN");*/
+
+    const [open, setOpen] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    const [id, setId] = useState("")
+    const [todoObj, setTodoObj] = useState<TodoType>(
+        {id: "", description: "", status: 0});
+    const [description, setDescription] = useState<string>("");
 
 
-    /*  async function getTodos() {
-          try {
-              const request = await axios.get("http://localhost:8080/api/v1/todos")
-              setTodos(request.data)
-          } catch (error) {
-              if(error instanceof AxiosError) setError({postError: "", getError:"could not fetch todos"});
-          }
-      }*/
-
-    /*   useEffect(() => {
+    /* useEffect(() => {
            getTodos()
            setFilters(todos);
        }, [])*/
 
-    /*    async function addTodo() {
-            try {
-                const newTodo:{description:string, status:string} = {
-                    description: desc,
-                    status: "OPEN"
-                }
-                await axios.post("http://localhost:8080/api/v1/todos", newTodo)
-                setDesc("")
-                setTodos(todos)
-            } catch (error) {
-                if(error instanceof AxiosError) setError({getError: "", postError:"could not add todo"});
-            }
-        }*/
-
-    /* async function patchTodo(status: string, statusId: string) {
-         try {
-             const patchData: { status: string } = {
-                 status: status
-             }
-             await axios.patch(`http://localhost:8080/api/v1/todos/status?id=${statusId}`, patchData)
-         } catch (error) {
-             console.warn(error)
-         }
-     }*/
 
     /*   async function editTodo(desc: string, status: string, id: string) {
            try {
@@ -68,14 +43,6 @@ function App() {
            }
        }*/
 
-    /* async function deleteTodo(id: string) {
-         try {
-             await axios.delete(`http://localhost:8080/api/v1/todos/delete?id=${id}`)
-         } catch (error) {
-             console.log(error)
-         }
-     }*/
-
 
     /* useEffect(() => {
          const filters = todos.filter((td) => td.status.includes(activeFilters))
@@ -85,13 +52,23 @@ function App() {
 
     //const activeStyled = {backgroundColor: "blue"}
 
-    return (
-        <Box sx={{flexGrow: 1}}>
-            <Grid container spacing={2}>
-                <AppHeader/>
+    const handleClickOpen = (id: string) => {
+        setOpen(true)
+        setIsEdit(true)
+        setId(id)
+    };
 
-            </Grid>
-        </Box>
+    return (
+        <>
+            <EditDialog open={open} description={description} setOpen={setOpen} todoObj={todoObj} setIsEdit={setIsEdit}
+                        id={id} setId={setId}/>
+            <AppHeader/>
+            <TodoForm id={id} setIsEdit={setIsEdit} isEdit={isEdit} description={description}
+                      setDescription={setDescription}/>
+            <TodoChips/>
+            <TodosContainer setTodoObj={setTodoObj} setIsEdit={setIsEdit} handleClickOpen={handleClickOpen}
+                            setOpen={setOpen}/>
+        </>
     )
 }
 

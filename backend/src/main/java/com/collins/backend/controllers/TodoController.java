@@ -31,18 +31,18 @@ public class TodoController {
         return todoService.addTodo(todo);
     }
 
-    @DeleteMapping
-    public List<Todo> deleteTodo(@RequestParam String id) {
+    @DeleteMapping("/{id}")
+    public List<Todo> deleteTodo(@PathVariable String id) {
         return todoService.deleteTodo(id);
     }
 
-    @PutMapping
-    public Todo editTodo(@RequestBody Todo todoEdit, @RequestParam String id) {
+    @PutMapping("/{id}")
+    public Todo editTodo(@RequestBody Todo todoEdit, @PathVariable String id) {
         return todoService.editTodo(todoEdit, id);
     }
 
-    @PatchMapping
-    public Todo patchTodo(@RequestBody Todo patchTodo, @RequestParam String id) {
+    @PatchMapping("/{id}")
+    public Todo patchTodo(@RequestBody Todo patchTodo, @PathVariable String id) {
         return todoService.editTodoStatus(patchTodo, id);
     }
 
