@@ -28,8 +28,7 @@ function TodoForm({id, isEdit, setIsEdit, setDescription, description}: props) {
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         await addContact({description, status: "OPEN"})
-
-
+        setDescription("")
     }
 
     const [addContact] = useAddTodoMutation();
