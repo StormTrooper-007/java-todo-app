@@ -2,48 +2,41 @@ package com.collins.backend.controllers;
 
 
 import com.collins.backend.models.Todo;
+import com.collins.backend.models.TodoDTO;
 import com.collins.backend.services.TodoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/v1/todos")
-@CrossOrigin(origins = "http://localhost:5173")
+@RequiredArgsConstructor
 public class TodoController {
 
-    private TodoService todoService;
-
-
-    @Autowired
-    public TodoController(TodoService todoService) {
-        this.todoService = todoService;
-    }
+    private final TodoService todoService;
 
     @GetMapping
-    public List<Todo> getTodos() {
-        return todoService.getTodos();
+    public ResponseEntity<List<Todo>> getTodos() {
+        return ResponseEntity.ok(todoService.getAllTodos());
     }
 
     @PostMapping
-    public Todo addTodo(@RequestBody Todo todo) {
-        return todoService.addTodo(todo);
+    public ResponseEntity<Todo> addTodo(@RequestBody TodoDTO todoDTO) {
+        return ResponseEntity.ok(todoService.addTodo(todoDTO));
+
     }
 
     @DeleteMapping("/{id}")
-    public List<Todo> deleteTodo(@PathVariable String id) {
-        return todoService.deleteTodo(id);
-    }
-
-    @PutMapping("/{id}")
-    public Todo editTodo(@RequestBody Todo todoEdit, @PathVariable String id) {
-        return todoService.editTodo(todoEdit, id);
+    public void deleteTodo(@PathVariable String id) {
+        todoService.deleteTodo(id);
     }
 
     @PatchMapping("/{id}")
-    public Todo patchTodo(@RequestBody Todo patchTodo, @PathVariable String id) {
-        return todoService.editTodoStatus(patchTodo, id);
+    public ResponseEntity<Todo> patchTodo(@RequestBody Todo todo, @PathVariable String id) {
+        return ResponseEntity.ok(todoService.editStatus(todo, id));
     }
 
 }

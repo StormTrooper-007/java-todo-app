@@ -27,7 +27,7 @@ type props = {
 }
 
 
-function EditDialog({setOpen, open, setIsEdit, setId, id, todoObj}: props) {
+function EditDialog({setOpen, open, setIsEdit, setId, id}: props) {
     const [patchTodo] = usePatchTodoMutation()
     const [status, setStatus] = useState<Status>(0)
 
@@ -43,10 +43,10 @@ function EditDialog({setOpen, open, setIsEdit, setId, id, todoObj}: props) {
         setStatus(value as Status)
     };
 
-    async function handleStatusUpdate(todo: TodoType) {
+    async function handleStatusUpdate(todo: { id: string, status: Status }) {
         await patchTodo(todo)
         handleClose()
-        console.log(todo)
+        console.log(status)
     }
 
 
@@ -91,7 +91,7 @@ function EditDialog({setOpen, open, setIsEdit, setId, id, todoObj}: props) {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleStatusUpdate({id, description: todoObj.description, status})}
+                    <Button onClick={() => handleStatusUpdate({id, status})}
                             variant="contained" sx={{textTransform: "none"}}>update status</Button>
                 </DialogActions>
             </Dialog>

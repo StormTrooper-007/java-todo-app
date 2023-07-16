@@ -18,6 +18,7 @@ export enum Status {
 export type TodoType = {
     id: string,
     description: string,
-    status: Status
+    status: Status,
+    date: string
 }
 

@@ -1,6 +1,6 @@
 import {Button, Grid, TextField} from "@mui/material";
 import {FormEvent, SetStateAction, useEffect, useRef} from "react";
-import {Item} from "../Utils.tsx";
+import {Item, Status} from "../Utils.tsx";
 import {useAddTodoMutation} from "../features/api/apiSlice.tsx";
 
 type props = {
@@ -15,6 +15,7 @@ type props = {
 function TodoForm({id, isEdit, setIsEdit, setDescription, description}: props) {
 
     const todoRef = useRef("" as any);
+    const [addTodo] = useAddTodoMutation();
 
     useEffect(() => {
         if (id !== "") {
@@ -27,11 +28,11 @@ function TodoForm({id, isEdit, setIsEdit, setDescription, description}: props) {
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        await addContact({description, status: "OPEN"})
+        await addTodo({description, status: Status.OPEN})
         setDescription("")
     }
 
-    const [addContact] = useAddTodoMutation();
+
     return (
         <Grid item xs={6} sx={{ml: 2}}>
             <Item>

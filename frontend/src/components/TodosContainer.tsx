@@ -23,8 +23,7 @@ function TodosContainer({handleClickOpen, setIsEdit, setTodoObj}: props) {
                               setIsEdit={setIsEdit}/>
                 ))}
             </Grid>
-        </Box>
-    );
+        </Box>);
 }
 
 export default TodosContainer;

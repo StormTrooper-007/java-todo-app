@@ -1,40 +1,60 @@
 package com.collins.backend.services;
 
+import com.collins.backend.models.Status;
 import com.collins.backend.models.Todo;
-import com.collins.backend.repository.TodoRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.collins.backend.models.TodoConverter;
+import com.collins.backend.models.TodoDTO;
+import com.collins.backend.repository.TodoRepository;
+import com.collins.backend.security.TodoUser;
+import com.collins.backend.security.TodoUserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class TodoService {
 
-    private TodoRepo todoRepo;
+    private final TodoRepository todoRepository;
+    private final TodoUserRepository todoUserRepository;
 
-    @Autowired
-    public TodoService(TodoRepo todoRepo){
-        this.todoRepo = todoRepo;
+    private final TodoConverter todoConverter;
+
+    public List<Todo> getAllTodos() {
+        return Optional.of(todoRepository.findAll())
+                .orElseThrow(() -> new RuntimeException("Error occured while fetching"));
     }
 
-    public List<Todo> getTodos(){
-        return todoRepo.getTodos();
+    public String getTodoUserId() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        TodoUser currentUser = todoUserRepository.findByUsername(username).orElseThrow();
+        return currentUser.id();
     }
 
-    public Todo addTodo(Todo todo) {
-
-        return todoRepo.addTodo(todo);
+    public Todo addTodo(TodoDTO todoDTO) {
+        Todo todo = todoConverter.convertDtoToEntity(todoDTO);
+        todo.setOwnerId(getTodoUserId());
+        todo.setId(UUID.randomUUID().toString());
+        todo.setSubmissionDate(new Date());
+        todo.setStatus(Status.OPEN);
+        todoRepository.save(todo);
+        return todo;
     }
 
-    public List<Todo> deleteTodo(String id) {
-        return todoRepo.deleteTodo(id);
+    public void deleteTodo(String id) {
+        todoRepository.deleteById(id);
     }
 
-    public Todo editTodo(Todo todoEdit, String id) {
-        return todoRepo.editTodo(todoEdit, id);
+    public Todo editStatus(Todo todo, String id) {
+        Todo todoEdit = todoRepository.findById(id).orElseThrow(() -> new IndexOutOfBoundsException("Todo not found"));
+        todoEdit.setStatus(todo.getStatus());
+        todoRepository.save(todoEdit);
+        return todoEdit;
     }
 
-    public Todo editTodoStatus(Todo patchTodo, String id) {
-        return todoRepo.editTodoStatus(patchTodo, id);
-    }
 }

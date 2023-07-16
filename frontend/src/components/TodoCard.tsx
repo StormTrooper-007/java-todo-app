@@ -25,6 +25,7 @@ function TodoCard({todo, handleClickOpen, setTodoObj}: props) {
                 <CardContent>
                     <Typography>Todo: {todo.description}</Typography>
                     <Typography>Status: {todo.status}</Typography>
+                    <Typography>Created: {todo.date}</Typography>
                 </CardContent>
                 <CardContent sx={{display: "flex"}}>
                     <CardActions><Button
